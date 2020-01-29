@@ -16,7 +16,8 @@ def parse_args(INFO):
 
 def print_dict(DICT):
 	for i in DICT.keys():
-		print(i+": "+DICT[i])
+		if DICT[i] != "":
+			print(i+": "+DICT[i])
 
 def main():
 	requestInfo = {
