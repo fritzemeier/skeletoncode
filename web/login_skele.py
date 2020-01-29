@@ -14,6 +14,17 @@ def parse_args(INFO):
 
 	return INFO
 
+def parse_params(STR):
+
+	DICT = {}
+
+	for ENTRY in STR.split(","):
+		PARAM = ENTRY.split('=')[0]
+		VAL = ENTRY.strip(PARAM+'=')
+		DICT[PARAM] = VAL
+
+	return DICT
+
 def print_dict(DICT):
 	for i in DICT.keys():
 		if DICT[i]:
@@ -37,20 +48,34 @@ def print_response(RES):
 
 def request_login(NAME,PASS,INFO,SPEC):
 	if INFO["DATA"] and INFO["HEADERS"]:
-		print(1)
 
-		F_HEAD = {}
+		F_HEAD = parse_params(INFO["HEADERS"])
+		F_DATA = parse_params(INFO["DATA"])
 
-		for i in INFO["HEADERS"].split(","):
-			print(i)
-			H_KEY = i.split('=')[0]
-			H_VAL = i.strip(H_KEY+'=')
-			F_HEAD[H_KEY] = H_VAL
+		if SPEC["UPARAM"]:
+			F_DATA[SPEC["UPARAM"]] = NAME
+		else:
+			F_DATA["username"] = NAME
 
+		if SPEC["PPARAM"]:
+			F_DATA[SPEC["PPARAM"]] = PASS
+		else:
+			F_DATA["password"] = PASS
+
+		print("DATA: ")
+		print_dict(F_DATA)
+		print("HEADERS: ")
 		print_dict(F_HEAD)
 
-		REQ = requests.Request("POST",INFO["URL"], headers=F_HEAD,data=INFO["DATA"])
+#		if not all(VAL == "" for VAL in SPEC.values()):
+#			if SPEC["UPARAM"]:
+
+
+		REQ = requests.Request("POST",INFO["URL"], headers=F_HEAD,data=F_DATA)
 		print_request(REQ)
+
+		RES = requests.post(INFO["URL"], headers=F_HEAD,data=F_DATA)
+		print_response(RES)
 
 	elif INFO["DATA"]:
 		print(2)
