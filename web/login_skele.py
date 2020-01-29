@@ -16,7 +16,7 @@ def parse_args(INFO):
 
 def print_dict(DICT):
 	for i in DICT.keys():
-		if DICT[i] != "":
+		if DICT[i]:
 			print(i+": "+DICT[i])
 
 def main():
@@ -48,6 +48,13 @@ def main():
 		print("User Data")
 		print_dict(userData)
 		print()
+
+
+	if userData["USER"]:
+
+		userArr = userData["USER"].split(",")
+		for name in userArr:
+			#BEGIN PROCESSING/MAKING REQUESTS BELOW
 
 if __name__ == "__main__":
 	main()
