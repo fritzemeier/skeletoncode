@@ -3,9 +3,40 @@ import requests
 
 def parse_args(INFO):
 
+	MENU = {
+
+		"USER":"String of a single username or list of usernames separated by commas.",
+		"PASS":"String of a single password or list of passwords separated by commas.",
+		"USERFILE":"Path to a file containing usernames, formatted one per line.",
+		"PASSFILE":"Path to a file containing passwords, formatted one per line.",
+		"URL":"Full URL to the page to attempt authentication against.",
+		"HEADERS":"Add custom headers to the requests.",
+		"DATA":"Add custom parameters to the requests.",
+		"UPARAM":"Specify the username parameter specific to the request.",
+		"PPARAM":"Specify the password parameter specific to the request.",
+		"RAND":"Items that may change per request.",
+		"FAILSTR":"String which occurs on failed a attempt.",
+		"FAILCODE":"Status code that occurs on a failed attempt."
+
+	}
+
 	for i in range(1,len(sys.argv)):
 
 		CURR = sys.argv[i]
+
+		if CURR[0:2] == '--':
+
+			if CURR[2:] == "help":
+				print("Multi-Credential Login Tool\n")
+				if (i+1) < len(sys.argv) and sys.argv[i+1] in MENU.keys():
+					OPT = { sys.argv[i+1]:MENU[sys.argv[i+1]] }
+					print_dict(OPT)
+				else:
+					print_dict(MENU)
+
+				sys.exit()
+
+
 		KEY = CURR.split("=")[0]
 		VAL = CURR.strip(KEY+"=")
 
@@ -28,7 +59,9 @@ def parse_params(STR):
 def print_dict(DICT):
 	for i in DICT.keys():
 		if DICT[i]:
-			print(i+": "+DICT[i])
+			ITEM = i+" "*(10-len(i))
+			print("    "+ITEM+"		"+DICT[i])
+	print()
 
 def print_request(REQ):
 	print("HTTP/1.1 {method} {url}\n{headers}\n\n".format( #{body}".format(
@@ -106,7 +139,8 @@ def main():
 		"UPARAM":"",
 		"PPARAM":"",
 		"RAND":"",
-		"FAIL":""
+		"FAILSTR":"",
+		"FAILCODE":""
 
 	}
 
