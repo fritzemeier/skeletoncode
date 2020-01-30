@@ -61,7 +61,6 @@ def print_dict(DICT):
 		if DICT[i]:
 			ITEM = i+" "*(10-len(i))
 			print("    "+ITEM+"		"+DICT[i])
-	print()
 
 def print_request(REQ):
 	print("HTTP/1.1 {method} {url}\n{headers}\n\n".format( #{body}".format(
@@ -97,8 +96,10 @@ def request_login(NAME,PASS,INFO,SPEC):
 
 		print("DATA: ")
 		print_dict(F_DATA)
+		print()
 		print("HEADERS: ")
 		print_dict(F_HEAD)
+		print()
 
 #		if not all(VAL == "" for VAL in SPEC.values()):
 #			if SPEC["UPARAM"]:
