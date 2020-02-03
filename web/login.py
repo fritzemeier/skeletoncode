@@ -38,6 +38,11 @@ def parse_args(INFO):
 
 		if CURR == "BASIC":
 			INFO["BASIC"] = True
+			continue
+
+		if CURR == "COOKIE":
+			INFO["COOKIE"] = True
+			continue
 
 
 		KEY = CURR.split("=")[0]
@@ -85,17 +90,15 @@ def print_response(RES):
 def request_login(NAME,PASS,INFO,SPEC):
 
 	if INFO["HEADERS"]:
-		print(INFO["HEADERS"])
 		F_HEAD = parse_params(INFO["HEADERS"])
-		print("HEADERS: ")
-		print_dict(F_HEAD)
-		print()
 
 	if INFO["DATA"]:
 		F_DATA = parse_params(INFO["DATA"])
 
 #	if INFO["R_HEAD"]:
-
+	if SPEC["COOKIE"]:
+		TMP_REQ = requests.get(INFO["URL"], headers=F_HEAD)
+		F_HEAD["Cookie"] = TMP_REQ.headers["Set-Cookie"]
 
 	if SPEC["UPARAM"]:
 		F_DATA[SPEC["UPARAM"]] = NAME
@@ -106,6 +109,10 @@ def request_login(NAME,PASS,INFO,SPEC):
 		F_DATA[SPEC["PPARAM"]] = PASS
 	else:
 		F_DATA["password"] = PASS
+
+	print("HEADERS: ")
+	print_dict(F_HEAD)
+	print()
 
 	print("DATA: ")
 	print_dict(F_DATA)
@@ -155,8 +162,9 @@ def main():
 		"PPARAM":"",
 		"R_HEAD":"",
 		"R_DATA":"",
-		"FAILSTR":"",
+		"COOKIE":False,
 		"BASIC":False,
+		"FAILSTR":"",
 		"FAILCODE":""
 
 	}
@@ -175,6 +183,14 @@ def main():
 		print("User Data")
 		print_dict(userData)
 		print("")
+
+	if not all(VAL == "" for VAL in requestSpecifics.values()):
+		print("Request Specifics")
+		print_dict(requestSpecifics)
+		print("")
+
+	if requestSpecifics["COOKIE"]:
+		print("True")
 
 
 	if userData["USER"]:
