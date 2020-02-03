@@ -36,9 +36,13 @@ def parse_args(INFO):
 
 				sys.exit()
 
+		if CURR == "BASIC":
+			INFO["BASIC"] = True
+
 
 		KEY = CURR.split("=")[0]
-		VAL = CURR.strip(KEY+"=")
+#		VAL = CURR.strip(KEY+"=")
+		VAL = CURR[(len(KEY)+1):]
 
 		if KEY in INFO.keys():
 			INFO[KEY] = VAL
@@ -79,31 +83,39 @@ def print_response(RES):
 		))
 
 def request_login(NAME,PASS,INFO,SPEC):
-	if INFO["DATA"] and INFO["HEADERS"]:
 
+	if INFO["HEADERS"]:
+		print(INFO["HEADERS"])
 		F_HEAD = parse_params(INFO["HEADERS"])
-		F_DATA = parse_params(INFO["DATA"])
-
-		if SPEC["UPARAM"]:
-			F_DATA[SPEC["UPARAM"]] = NAME
-		else:
-			F_DATA["username"] = NAME
-
-		if SPEC["PPARAM"]:
-			F_DATA[SPEC["PPARAM"]] = PASS
-		else:
-			F_DATA["password"] = PASS
-
-		print("DATA: ")
-		print_dict(F_DATA)
-		print()
 		print("HEADERS: ")
 		print_dict(F_HEAD)
 		print()
 
+	if INFO["DATA"]:
+		F_DATA = parse_params(INFO["DATA"])
+
+#	if INFO["R_HEAD"]:
+
+
+	if SPEC["UPARAM"]:
+		F_DATA[SPEC["UPARAM"]] = NAME
+	else:
+		F_DATA["username"] = NAME
+
+	if SPEC["PPARAM"]:
+		F_DATA[SPEC["PPARAM"]] = PASS
+	else:
+		F_DATA["password"] = PASS
+
+	print("DATA: ")
+	print_dict(F_DATA)
+	print()
+
 #		if not all(VAL == "" for VAL in SPEC.values()):
 #			if SPEC["UPARAM"]:
 
+#	if INFO["DATA"] and INFO["HEADERS"]:
+	if F_DATA and F_HEAD:
 
 		REQ = requests.Request("POST",INFO["URL"], headers=F_HEAD,data=F_DATA)
 		print_request(REQ)
@@ -111,9 +123,11 @@ def request_login(NAME,PASS,INFO,SPEC):
 		RES = requests.post(INFO["URL"], headers=F_HEAD,data=F_DATA)
 		print_response(RES)
 
-	elif INFO["DATA"]:
+#	elif INFO["DATA"]:
+	elif F_DATA:
 		print(2)
-	elif INFO["HEADERS"]:
+#	elif INFO["HEADERS"]:
+	elif F_HEADERS:
 		print(3)
 	else:
 		print(99)
@@ -139,8 +153,10 @@ def main():
 
 		"UPARAM":"",
 		"PPARAM":"",
-		"RAND":"",
+		"R_HEAD":"",
+		"R_DATA":"",
 		"FAILSTR":"",
+		"BASIC":False,
 		"FAILCODE":""
 
 	}
