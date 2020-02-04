@@ -44,11 +44,21 @@ def main():
 
 	obfStr = obfFile.readline().split("=")[1]
 
-	obfDict = {}
+	obfArr = obfStr.replace(" ","").replace("\n","").split("+")
 
-	for i in obfStr[:-1].split("+"):
+	print(obfArr)
+
+#	sys.exit()
+
+
+	obfDict = {}
+	strDict = {}
+
+	deobfStr = ""
+
+	for i in obfArr:
 #		print('"'+i.strip(" ")+'"')
-		obfDict[i.strip(" ")] = { \
+		obfDict[i.replace("\n","")] = { \
 
 						"VAR":"", \
 						"P1":"", \
@@ -59,7 +69,7 @@ def main():
 	for i in inFile:
 		TMP = i.split("=")[0]
 
-		VAR = TMP.strip(" ")
+		VAR = TMP.replace(" ","").replace("\n","")
 
 		STR =  i[(len(TMP)+1):-1]
 
@@ -72,6 +82,36 @@ def main():
 			obfDict[VAR]["P2"] = p2
 
 	print_dict(obfDict)
+
+#	sys.exit()
+
+	for i in obfDict.keys():
+		if obfDict[i]["VAR"]:
+			strDict[obfDict[i]["VAR"]] = "NONE"
+
+	if cliArgs["IF"]:
+		inFile = open(cliArgs["IF"], "r")
+
+	for i in inFile:
+		TMP = i.split("=")[0]
+
+		VAR = TMP.strip(" ")
+
+		STR =  i[(len(TMP)+2):-1]
+
+		if VAR in strDict.keys():
+			strDict[VAR] = STR
+
+	print_dict(strDict)
+
+#	sys.exit()
+
+	for i in range(0,(len(obfArr))):
+		if obfArr[i] in obfDict.keys() and obfDict[obfArr[i]]["VAR"]:
+			deobfStr += strDict[obfDict[obfArr[i]]["VAR"]][(int(obfDict[obfArr[i]]["P1"])):((int(obfDict[obfArr[i]]["P1"])+int(obfDict[obfArr[i]]["P2"])))]
+		elif obfArr[i][:4] == "Chr(":
+			deobfStr += chr(int(obfArr[i][4:-1]))
+	print(deobfStr)
 
 if __name__ == "__main__":
 	main()
