@@ -59,7 +59,7 @@ def main():
 
 	obfArr = obfStr.replace(" ","").replace("\n","").split("+")
 
-#	print(obfArr)
+	print(obfArr)
 
 #	sys.exit()
 
@@ -86,7 +86,7 @@ def main():
 
 		STR =  i[(len(TMP)+1):-1]
 
-		if VAR in obfDict.keys(): #and "Mid" not in STR:
+		if VAR in obfDict.keys() and not obfDict[VAR]["VAR"]: #and "Mid" not in STR:
 			nameVar, p1, p2 = STR.replace(" ","").split("(")[1].strip(")").split(",")
 			#obfDict[VAR] = STR
 
@@ -94,13 +94,13 @@ def main():
 			obfDict[VAR]["P1"] = p1
 			obfDict[VAR]["P2"] = p2
 
-#	print_dict(obfDict)
+	print_dict(obfDict)
 
 #	sys.exit()
 
 	for i in obfDict.keys():
 		if obfDict[i]["VAR"]:
-			strDict[obfDict[i]["VAR"]] = "NONE"
+			strDict[obfDict[i]["VAR"]] = ""
 
 	if cliArgs["IF"]:
 		inFile = open(cliArgs["IF"], "r")
@@ -112,10 +112,10 @@ def main():
 
 		STR =  i[(len(TMP)+2):-1]
 
-		if VAR in strDict.keys():
+		if VAR in strDict.keys() and not strDict[VAR]:
 			strDict[VAR] = STR
 
-#	print_dict(strDict)
+	print_dict(strDict)
 
 #	sys.exit()
 
