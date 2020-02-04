@@ -44,8 +44,6 @@ def main():
 
 	cliArgs = parse_args(cliArgs)
 
-	print_dict(cliArgs)
-
 	if cliArgs["IF"]:
 		obfFile = open(cliArgs["IF"], "r")
 
@@ -68,8 +66,6 @@ def main():
 
 		for z in LO.replace(" ","").replace("\n","").split("=")[1].split("+"):
 			obfStrs[FUNC]["PCS"][z] = z
-
-	deobfStrs = {}
 
 	for KEY in obfStrs.keys():
 
