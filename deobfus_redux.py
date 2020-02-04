@@ -15,7 +15,7 @@ def parse_args(INFO):
 
 def print_dict(INFO):
 	for i in INFO.keys():
-		print("  "+i+" "*(10-len(i))+"		"+INFO[i])
+		print("  "+i+" "*(10-len(i))+"		"+str(INFO[i]))
 
 
 def main():
@@ -48,13 +48,30 @@ def main():
 
 	for i in obfStr[:-1].split("+"):
 #		print('"'+i.strip(" ")+'"')
-		obfDict[i.strip(" ")] = "NONE"
+		obfDict[i.strip(" ")] = { \
 
-	print_dict(obfDict)
+						"VAR":"", \
+						"P1":"", \
+						"P2":""
+
+					}
 
 	for i in inFile:
-		if i.split("=") in obfArr.keys():
+		TMP = i.split("=")[0]
 
+		VAR = TMP.strip(" ")
+
+		STR =  i[(len(TMP)+1):-1]
+
+		if VAR in obfDict.keys(): #and "Mid" not in STR:
+			nameVar, p1, p2 = STR.replace(" ","").split("(")[1].strip(")").split(",")
+			#obfDict[VAR] = STR
+
+			obfDict[VAR]["VAR"] = nameVar
+			obfDict[VAR]["P1"] = p1
+			obfDict[VAR]["P2"] = p2
+
+	print_dict(obfDict)
 
 if __name__ == "__main__":
 	main()
