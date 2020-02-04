@@ -2,8 +2,21 @@ import sys
 
 def parse_args(INFO):
 
+	MENU = { \
+
+			"OBF":"Obfuscated algorithm file", \
+			"IF":"Path to file containing all OLEdump streams combined", \
+			"OF":"Output file (Not implemented)"
+
+		}
+
 	for i in range(1,len(sys.argv)):
 		CURR = sys.argv[i]
+
+		if CURR[:2] == "--":
+			if CURR[2:] == "help":
+				print_dict(MENU)
+				sys.exit()
 
 		KEY = CURR.split("=")[0]
 
@@ -46,7 +59,7 @@ def main():
 
 	obfArr = obfStr.replace(" ","").replace("\n","").split("+")
 
-	print(obfArr)
+#	print(obfArr)
 
 #	sys.exit()
 
@@ -81,7 +94,7 @@ def main():
 			obfDict[VAR]["P1"] = p1
 			obfDict[VAR]["P2"] = p2
 
-	print_dict(obfDict)
+#	print_dict(obfDict)
 
 #	sys.exit()
 
@@ -102,7 +115,7 @@ def main():
 		if VAR in strDict.keys():
 			strDict[VAR] = STR
 
-	print_dict(strDict)
+#	print_dict(strDict)
 
 #	sys.exit()
 
